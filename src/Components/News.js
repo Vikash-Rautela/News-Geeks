@@ -16,7 +16,7 @@ function News(props) {
       setLoading(true);
       setError(null);
       try {
-        const url = `https://newsapi.org/v2/top-headlines?country=in&category=${category}&page=${page}&apiKey=${process.env.API_KEY}`;
+        const url = `https://newsapi.org/v2/top-headlines?country=in&category=${category}&page=${page}&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`;
         const response = await fetch(url);
         const data = await response.json();
         console.log(data)
