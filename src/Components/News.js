@@ -19,11 +19,13 @@ function News(props) {
         const url = `https://newsapi.org/v2/top-headlines?country=in&category=${category}&page=${page}&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`;
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data)
+        if (data.status === "error") {
+          throw new Error(data.message || "An error occurred while fetching news.");
+        }
         setArticles((prevArticles) => [...prevArticles, ...data.articles]);
         setTotalResults(data.totalResults);
       } catch (error) {
-        setError("An error occurred while fetching news.");
+        setError(error.message);
       }
       setLoading(false);
     };
@@ -39,31 +41,33 @@ function News(props) {
     <div className="container my-3">
       {loading && <h4 className="text-center">Loading...</h4>}
       {error && <div className="alert alert-danger">{error}</div>}
-      <InfiniteScroll
-        dataLength={articles.length}
-        next={fetchData}
-        hasMore={articles.length < totalResults}
-        loader={<h4 className="text-center">Loading...</h4>}
-        endMessage={
-          <p style={{ textAlign: "center" }}>
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
-      >
-        <div className="row">
-          {articles.map((element) => (
-            <div className="col-md-4" key={element.url}>
-              <NewsItem
-                sourceName={element.source.name}
-                title={element.title}
-                desc={element.description}
-                imageURL={element.urlToImage ? element.urlToImage : Image}
-                newsUrl={element.url}
-              />
-            </div>
-          ))}
-        </div>
-      </InfiniteScroll>
+      {!error && (
+        <InfiniteScroll
+          dataLength={articles.length}
+          next={fetchData}
+          hasMore={articles.length < totalResults}
+          loader={<h4 className="text-center">Loading...</h4>}
+          endMessage={
+            <p style={{ textAlign: "center" }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          }
+        >
+          <div className="row">
+            {articles.map((element) => (
+              <div className="col-md-4" key={element.url}>
+                <NewsItem
+                  sourceName={element.source.name}
+                  title={element.title}
+                  desc={element.description}
+                  imageURL={element.urlToImage ? element.urlToImage : Image}
+                  newsUrl={element.url}
+                />
+              </div>
+            ))}
+          </div>
+        </InfiniteScroll>
+      )}
       {articles.length === 0 && !loading && !error && (
         <p>No articles found for the selected category.</p>
       )}
