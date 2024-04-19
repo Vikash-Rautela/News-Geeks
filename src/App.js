@@ -1,10 +1,7 @@
-// import "./App.css";
 import React from "react";
 import NavBar2 from "./Components/NavBar2";
 import NavBar1 from "./Components/NavBar1";
 import News from "./Components/News";
-import SideBar from "./Components/SideBar";
-import Footer from "./Components/Footer";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -17,7 +14,7 @@ function App() {
 
           <div className="container">
             <div className="row">
-              <div className="col-md-8">
+              <div className="col-md">
                 <Routes>
                   <Route
                     path="/"
@@ -51,11 +48,7 @@ function App() {
                   />
                 </Routes>
               </div>
-              <div className="col-md-4 ">
-                <SideBar />
-              </div>
             </div>
-            <Footer />
           </div>
         </BrowserRouter>
       </div>
